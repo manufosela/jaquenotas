@@ -133,10 +133,10 @@ async function save(event) {
           Datos guardados correctamente:
 
           Grado de dolor ${data.gradodolor}
-          Molestias ${data.molestias}
-          Otros síntomas ${data.otros_sintomas}
-          Medicación ${data.medicacion}
-          Duracion ${data.duracion}
+          ${data.molestias ? `Molestias ${data.molestias}` : 'Sin molestias definidas'}
+          ${data.otros_sintomas ? `Otros síntomas ${data.otros_sintomas}` : 'Sin otros síntomas'}
+          ${data.medicacion ? `Medicación ${data.medicacion}` : 'Sin medicación'}
+          ${data.duracion ? `Duración ${data.duracion}h` : 'Sin duración definida'}
           Continuacion proceso anterior: ${data.mismoproceso ? 'Sí' : 'No' }
         `);
       });
@@ -254,14 +254,7 @@ function showStats(ev) {
         }
 
       }
-      // Si el nextItem tiene el mismo día, la duracion del item es la diferecia entra la hora de nextitem y la hora del item.
-      // El borde del item es en discontinuo, usando la propiedad borderDash con valor [5, 5]. 
-      // Si el next Item es en el siguiente dia, hay que ampliar la duracion de este item hasta el final del dia y crear 
-      // un item nuevo para el siguiente dia hasta la hora de inicio del siguiente item y su duracion.
-
-      // Comprobar que el siguiente por si sigue siendo continuación.
     }
-
 
     const dia = day.dia;
     const duracion = day.duracion || 0;
