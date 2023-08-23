@@ -9,6 +9,7 @@ let $modalOverlay;
 let $crud;
 let $user;
 let $allData;
+const $borderWidth = (window.innerWidth < 768 ? 5 : 10)
 
 let gradodolor;
 let molestias;
@@ -213,10 +214,10 @@ function showStats(ev) {
   const year = selectedOption.dataset.year;
   const month = ev.target.value;
   const gradoColor = {
-    "1": "#FFC0C0",
-    "2": "#FF8080",
-    "3": "#FF4040",
-    "4": "#FF0000"
+    "1": "#C0C0FF",
+    "2": "#8080FF",
+    "3": "#4040FF",
+    "4": "#8A2BE2"
   };
   const allHours = Array.from({ length: 24 }, (_, i) => i);
 
@@ -277,7 +278,8 @@ function showStats(ev) {
       label: day.label,
       backgroundColor: 'rgba(255, 0, 0, 0.2)',
       borderColor: gradoColor[day.grado],
-      borderWidth: 5,
+      borderWidth: $borderWidth,
+      responsive: true,
       fill: false
     };
     if (mismoprocesoanterior) {
