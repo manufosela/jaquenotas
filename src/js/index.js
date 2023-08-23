@@ -9,7 +9,38 @@ let $modalOverlay;
 let $crud;
 let $user;
 let $allData;
+let $lang = 'es';
 const $borderWidth = (window.innerWidth < 768 ? 5 : 10)
+const $monthLetter = {
+  "es": {
+    "01": "Ene",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Abr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Ago",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dic"
+  },
+  "en": {
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec"
+  }
+};
 
 let gradodolor;
 let molestias;
@@ -419,36 +450,50 @@ function editEntry(ev) {
  */
 function fillListado() {
   const listado = document.getElementById('listado');
-  /* get plain list of entries of allData */
-  const allEntries = Object.values($allData).flatMap(year => Object.values(year).flatMap(month => Object.values(month).flat()));
-  /* sort entries by date */
-  const sortedEntries = allEntries.sort((a, b) => new Date(a.fechahora) - new Date(b.fechahora));
-  /* create list of entries */
-  const indexes = {};
-  const list = sortedEntries.map((entry) => {
-    const date = new Date(entry.fechahora);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    const dateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    if (indexes[`${year}_${month}_${day}`]===undefined) {
-      indexes[`${year}_${month}_${day}`] = 0;
-    } else {
-      indexes[`${year}_${month}_${day}`] += 1;
-    }
-    const index = indexes[`${year}_${month}_${day}`];
-    return `<li><a href="#" data-id="${year},${month},${day},${index}">${dateString}</a></li>`;
-  }).join('');
-  listado.innerHTML = `<ul>${list}</ul>`;
+  const years = Object.keys($allData).sort((a, b) => a - b);
+  const list = years.reduce((acc, year) => {
+    const months = Object.keys($allData[year]).sort((a, b) => a - b);
+    const monthsList = months.reduce((acc, month) => {
+      const days = Object.keys($allData[year][month]).sort((a, b) => a - b);
+      const daysList = days.reduce((acc, day) => {
+        const entries = $allData[year][month][day];
+        const entriesList = entries.reduce((acc, entry, index) => {
+          const date = new Date(entry.fechahora);
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          const seconds = String(date.getSeconds()).padStart(2, '0');
+          acc += `<li><a href="#" data-id="${year},${month},${day},${index}">${date}</a></li>`;
+          return acc;
+        }, '');
+        acc += /* html */`
+          <ul>${entriesList}</ul>
+        `;
+        return acc;
+      }, '');
+      acc += /* html */`
+        <details>
+          <summary>${$monthLetter[$lang][month]}/${year}</summary>
+          <ul>${daysList}</ul>
+        </details>
+      `;
+      return acc;
+    }, '');
+    acc += /* html */`
+      <details>
+        <summary>${year}</summary>
+        <ul>${monthsList}</ul>
+      </details>
+    `;
+    return acc;
+  }, '');
+  listado.innerHTML = `${list}`;
   /* add event listener to each entry */
   const listadoLinks = [...document.querySelectorAll('#listado a')];
   listadoLinks.forEach((link) => {
     link.addEventListener('click', editEntry);
   });
 }
+
 
 async function firebaseReady() {
   document.addEventListener('firebase-signout', () => {
