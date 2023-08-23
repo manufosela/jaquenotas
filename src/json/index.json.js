@@ -32,7 +32,7 @@ export default {
         'fechahora': 'Fecha y hora',
         'edit': 'Editar',
         'gradodolor': 'Grado de dolor',
-        'mismoprocesoanterior': 'Mismo proceso anterior',
+        'mismoprocesoanterior': 'Continuación proceso anterior',
         'molestias': 'Molestias',
         'otrossintomas': 'Otros síntomas',
         'medicacion': 'Medicación',

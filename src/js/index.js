@@ -85,7 +85,7 @@ async function save(event) {
   if (result === 'OK') {
     try {
       const form = document.querySelector('form');
-      const { gradodolor, molestias, otros_sintomas, medicacion, duracion, fechahora } = form.elements;
+      const { gradodolor, molestias, otros_sintomas, medicacion, duracion, fechahora, mismoprocesoanterior } = form.elements;
       const molestiasFields = [...form.elements.molestiasGroup];
       const molestiasGroup = molestiasFields.filter((field) => field.checked).map((field) => field.value).join(',');
       const data = {
@@ -94,7 +94,8 @@ async function save(event) {
         otros_sintomas: otros_sintomas.value,
         medicacion: medicacion.value,
         duracion: duracion.value,
-        fechahora: fechahora.value
+        fechahora: fechahora.value,
+        mismoproceso: mismoprocesoanterior.checked,
       };
       const year = data.fechahora.slice(0, 4);
       const month = data.fechahora.slice(5, 7);
@@ -116,6 +117,13 @@ async function save(event) {
         const index = $allData[keys[0]][keys[1]][keys[2]].indexOf(entry);
         delete data.id
         $allData[keys[0]][keys[1]][keys[2]][index] = data;
+        /** REFACTOR
+        const {yearKey, monthKey, dayKey, posKey} = data.id.split(',');
+        const entry = $allData[yearKey][monthKey][dayKey][parseInt(posKey, 10)];
+        const index = $allData[yearKey][monthKey][dayKey].indexOf(entry);
+        delete data.id
+        $allData[yearKey][monthKey][dayKey][index] = data;
+        // */
       } else {
         $allData[year][month][day].push(data);
         document.getElementById('id').value = `${year},${month},${day},${$allData[year][month][day].length - 1}`;
@@ -128,7 +136,9 @@ async function save(event) {
           Molestias ${data.molestias}
           Otros síntomas ${data.otros_sintomas}
           Medicación ${data.medicacion}
-          Duracion ${data.duracion}`);
+          Duracion ${data.duracion}
+          Continuacion proceso anterior: ${data.mismoproceso ? 'Sí' : 'No' }
+        `);
       });
       document.getElementById('form').reset();
       console.log('saving data...');
@@ -173,16 +183,27 @@ function cookData(entrada) {
         medicacion: item.medicacion,
         otros_sintomas: item.otros_sintomas,
         molestias: item.molestias,
+        mismoproceso: item.mismoproceso,
         label: `Día ${dia}
           Duración ${duracion}h
           Grado ${grado}
           Medication ${item.medicacion}
-          Otros síntomas ${item.otros_sintomas}`
+          Otros síntomas ${item.otros_sintomas}
+          Continuacion proceso anterior: ${item.mismoproceso ? 'Sí' : 'No' }`
       });
     });
   }
 
   return salida;
+}
+
+function checkNextItem(data, index) {
+  if (index < data.length - 1) {
+    const nextItem = data[index + 1];
+    const mismoproceso = nextItem.mismoproceso;
+    return mismoproceso;
+  }
+  return false;
 }
 
 function showStats(ev) {
@@ -200,8 +221,47 @@ function showStats(ev) {
   const allHours = Array.from({ length: 24 }, (_, i) => i);
 
   const dataMes = cookData($allData[year][month]);
-  const datasets = dataMes.map(day => {
+  const datasets = dataMes.map((day, index) => {
     const lines = [];
+
+    const mismoprocesoanterior = checkNextItem(dataMes, index);
+    if (mismoprocesoanterior) {
+      if (index < dataMes.length - 1) {
+        if (dataMes[index + 1].dia === day.dia) {
+          const nextDay = dataMes[index + 1];
+          day.duracion = nextDay.inicio - day.inicio;
+          console.log(nextDay.inicio, day.inicio);
+        } else {
+          const nextDay = dataMes[index + 1];
+          day.duracion = 24 - day.inicio;
+          const newDay = {
+            dia: nextDay.dia,
+            inicio: 0,
+            duracion: nextDay.inicio,
+            grado: nextDay.grado,
+            medicacion: nextDay.medicacion,
+            otros_sintomas: nextDay.otros_sintomas,
+            molestias: nextDay.molestias,
+            mismoproceso: nextDay.mismoproceso,
+            label: `Día ${nextDay.dia}
+              Duración ${nextDay.inicio}h
+              Grado ${nextDay.grado}
+              Medication ${nextDay.medicacion}
+              Otros síntomas ${nextDay.otros_sintomas}
+              Continuacion proceso anterior: ${nextDay.mismoproceso ? 'Sí' : 'No' }`
+          };
+          dataMes.splice(index + 1, 0, newDay);
+        }
+
+      }
+      // Si el nextItem tiene el mismo día, la duracion del item es la diferecia entra la hora de nextitem y la hora del item.
+      // El borde del item es en discontinuo, usando la propiedad borderDash con valor [5, 5]. 
+      // Si el next Item es en el siguiente dia, hay que ampliar la duracion de este item hasta el final del dia y crear 
+      // un item nuevo para el siguiente dia hasta la hora de inicio del siguiente item y su duracion.
+
+      // Comprobar que el siguiente por si sigue siendo continuación.
+    }
+
 
     const dia = day.dia;
     const duracion = day.duracion || 0;
@@ -219,7 +279,7 @@ function showStats(ev) {
       });
     }
  
-    return {
+    const lineObject = {
       data: lines,
       label: day.label,
       backgroundColor: 'rgba(255, 0, 0, 0.2)',
@@ -227,6 +287,11 @@ function showStats(ev) {
       borderWidth: 5,
       fill: false
     };
+    if (mismoprocesoanterior) {
+      lineObject.borderDash = [5, 5];
+    }
+
+    return lineObject;
   });
   // console.log(dataMes);
   // console.log(datasets);

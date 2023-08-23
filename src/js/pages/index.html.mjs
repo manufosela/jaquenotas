@@ -53,8 +53,10 @@ const HTMLbody = /* html */`
           <option value="D2">Dolor muy punzante</option>
           <option value="D3">Dolor impide hacer vida normal</option>
         </select>
-        <label class="formElement6" for="mismoprocesoanterior">${formData.mismoprocesoanterior}</label>
-        <input class="formElement7" type="checkbox" name="mismoprocesoanterior" id="mismoprocesoanterior" tabindex="0">
+        
+        <input class="formElement6" type="checkbox" name="mismoprocesoanterior" id="mismoprocesoanterior" tabindex="0">
+        <label class="formElement7" for="mismoprocesoanterior">${formData.mismoprocesoanterior}</label>
+        
         <details class="formElement8" id="molestiasGroup" tabindex="0">
           <summary>${formData.molestias}</summary>
           <input type="hidden" name="molestias" id="molestias">
@@ -68,16 +70,20 @@ const HTMLbody = /* html */`
           <hr>
           <div><input type="checkbox" value="M7" name="molestiasGroup"><div>Fotofobia</div></div>
           <div><input type="checkbox" value="M8" name="molestiasGroup"><div>Nauseas</div></div>
-        </details>     
+        </details>
+
         <label class="formElement10" for="otros_sintomas">${formData.otrossintomas}</label>
         <textarea class="formElement11" name="otros_sintomas" id="otros_sintomas" tabindex="0"></textarea>
         <span class="formElement12"></span>
+        
         <label class="formElement13" for="medicacion">${formData.medicacion}</label>
         <input class="formElement14" type="text" name="medicacion" id="medicacion" tabindex="0">
         <span class="formElement15"></span>
+        
         <label class="formElement16" for="duracion">${formData.duracion}</label>
         <input class="formElement17" type="number" name="duracion" id="duracion" tabindex="0" step="any">
         <span class="formElement18">horas</span>
+        
         <button class="formElement19" id="guardar" aria-label="guardar información" tabindex="0">${formData.guardar}</button>
       </form>
     </detail>
