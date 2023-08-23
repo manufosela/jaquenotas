@@ -1,0 +1,179 @@
+@import "picohack.min.css";
+
+/** COMMON **/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+  --primary-100:#FF5733;
+  --primary-200:#ff8a5f;
+  --primary-300:#fff3bf;
+  --accent-100:#FFC300;
+  --accent-200:#916600;
+  --text-100:#FFFFFF;
+  --text-200:#e0e0e0;
+  --bg-100:#FFC09F;
+  --bg-200:#f4b695;
+  --bg-300:#ca9070;
+    
+  /* hack picoCSS */
+  --color: var(--primary-100) !important;
+  --background-color: var(--bg-100) ! important;
+  --form-element-background-color: var(--bg-200) ! important;
+  --form-element-color: var(--accent-200) ! important;
+  --form-element-placeholder-color: var(--accent-200) ! important;
+  --primary: var(--primary-100) ! important;
+  --primary-inverse: var(--bg-100) ! important;
+  --primary-hover: var(--primary-200) ! important;
+}
+
+.invisible {
+  display:none!important;
+}
+
+.required::after {
+  content: "*";
+  color: red;
+}
+
+.off {
+  opacity: 0;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  height: 100vh;
+  width: 100vw;
+  background-color: #555;
+  color:#33AAAA;
+}
+
+.fadeoff {
+  opacity: 0;
+	animation-name: fadeOffOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.fadein {
+  opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.loginbutton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-100);
+  color: var(--bg-100);
+  border: 1px solid var(--primary-100);
+  border-radius: 0.5rem;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  --firebase-loginbutton_mobile-icon-color__logged:var(--bg-100);
+  --firebase-loginbutton_mobile-icon-bg-color__logged: var(--primary-100);
+  --firebase-loginbutton_mobile-icon-color__not-logged: var(--primary-100);
+  --firebase-loginbutton_mobile-icon-bg-color__not-logged: var(--bg-100);
+  --firebase-loginbutton_mobile-button-height: 2.5rem;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes fadeOffOpacity {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+body {
+    font-size: var(--base-font-size);
+    line-height: var(--base-line-height);
+    margin: 0;
+    padding: 0;
+}
+
+/**
+ * Modal
+ */
+
+ .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-100);
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 80%;
+  text-align: center;
+  background-color: var(--accent-200);
+}
+
+.modal-content P {
+  color: var(--text-200) ! important;
+}
+.modal-content BUTTON {
+  color: var(--text-100) ! important;
+}
+
+.modal-overlay button {
+  background-color: var(--accent-100);
+  color: var(--text-100);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/** VARIABLES FONTS AND SIZES **/
+:root {
+  --base-font-size: 1.125rem; /* 18px */
+  --base-line-height: 1.8125rem; /* 29px */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --base-font-size: 1rem; /* 16px */
+    --base-line-height: 1.5rem; /* 24px */
+  }
+  .loading {
+    font-size: 2rem;
+  }
+}
