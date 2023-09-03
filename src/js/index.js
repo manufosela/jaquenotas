@@ -5,42 +5,16 @@ import './lib/common';
 import '@firebase-utils/firebase-loginbutton';
 import '@firebase-utils/firebase-crud';
 
+import jsonData from '../json/index.json.js';
+
+const $lang = navigator.language || navigator.userLanguage || localStorage.getItem('lang') || 'es';
+const formData = jsonData.index[$lang].formData;
 let $modalOverlay;
 let $crud;
 let $user;
 let $allData;
-let $lang = 'es';
 const $borderWidth = (window.innerWidth < 768 ? 5 : 10)
-const $monthLetter = {
-  "es": {
-    "01": "Ene",
-    "02": "Feb",
-    "03": "Mar",
-    "04": "Abr",
-    "05": "May",
-    "06": "Jun",
-    "07": "Jul",
-    "08": "Ago",
-    "09": "Sep",
-    "10": "Oct",
-    "11": "Nov",
-    "12": "Dic"
-  },
-  "en": {
-    "01": "Jan",
-    "02": "Feb",
-    "03": "Mar",
-    "04": "Apr",
-    "05": "May",
-    "06": "Jun",
-    "07": "Jul",
-    "08": "Aug",
-    "09": "Sep",
-    "10": "Oct",
-    "11": "Nov",
-    "12": "Dec"
-  }
-};
+const $monthLetters = formData.monthLetters;
 
 let gradodolor;
 let molestias;
@@ -49,6 +23,7 @@ let otros_sintomas;
 let medicacion;
 let duracion;
 let fechahora;
+
 function _closeModal() {
   /**
    * Closes the modal overlay by hiding it from the display.
@@ -61,12 +36,27 @@ function _closeModal() {
   const closeModalBtn = document.getElementById('closeModalBtn');
   // closeModalBtn.removeEventListener('click', _closeModal);
   document.getElementById('modalMessage').innerHTML = '';
+  resetModal();
   $modalOverlay.classList.add('invisible');
 }
 
-function getDaysInMonth(year, month) {
-  const lastDay = new Date(year, month, 0);
-  return lastDay.getDate();
+function showConfirmModal(message, callback) {
+  /**
+   *  Displays a modal overlay with a given message and a confirmation button.
+   * Calls a callback function when the user clicks on the confirmation button.
+   * 
+   * @param {string} message - The message to be displayed in the modal overlay.
+   * @param {function} callback - The callback function to be called when the user clicks on the confirmation button.
+   * @returns {void}
+   * 
+   */
+  document.getElementById('modalMessage').innerHTML = message;
+  document.getElementById('closeModalBtn').classList.add('invisible');
+  document.getElementById('yesModalBtn').classList.remove('invisible');
+  document.getElementById('noModalBtn').classList.remove('invisible');
+  document.getElementById('yesModalBtn').addEventListener('click', callback);
+  document.getElementById('noModalBtn').addEventListener('click', _closeModal);
+  $modalOverlay.classList.remove('invisible');
 }
 
 function showModal(message) {
@@ -79,6 +69,11 @@ function showModal(message) {
   document.getElementById('modalMessage').innerText = message;
   const closeModalBtn = document.getElementById('closeModalBtn');
   $modalOverlay.classList.remove('invisible');
+}
+
+function getDaysInMonth(year, month) {
+  const lastDay = new Date(year, month, 0);
+  return lastDay.getDate();
 }
 
 function validateForm() {
@@ -103,6 +98,56 @@ function validateForm() {
   return 'OK';
 }
 
+function resetModal() {
+  /**
+   * Resets the modal overlay by removing the event listeners from the buttons and hiding the buttons.
+   * 
+   * @returns {void}
+   */
+  document.getElementById('closeModalBtn').classList.remove('invisible');
+  document.getElementById('yesModalBtn').classList.add('invisible');
+  document.getElementById('noModalBtn').classList.add('invisible');
+}
+function resetEntry() {
+  document.getElementById('navigation').classList.add('invisible');
+  document.getElementById('id').value = '';
+  resetForm();
+  document.getElementById('subSummary').innerHTML = '(Nueva entrada)';
+  document.getElementById('subSummary').classList.remove('subSummaryEditando');
+  document.getElementById('borrar').classList.add('invisible');
+  document.getElementById('cancel').classList.add('invisible');
+}
+function resetForm() {
+  document.getElementById('form').reset();
+  document.getElementById('fechahora').value = new Date().toISOString().slice(0, 16);
+}
+
+async function _deleteEntry(ev) {
+  const id = ev.target.dataset.id || document.getElementById('id').value;
+  const [year, month, day, index] = id.split(',');
+  $allData[year][month][day].splice(index, 1);
+  await $crud.insertData($allData, `/misjaquecas/${$user}`);
+  resetModal();
+  showModal('Entrada borrada correctamente.');
+  resetEntry();
+}
+
+function deleteEntry(ev) {
+  /**
+   *  Deletes an entry from the `$allData` object and saves the data to the Firebase database using the `$crud` component.
+   *  Updates the list of entries displayed on the page and shows a modal with a success message or an error message if there is an issue.
+   *  
+   * @param {Event} ev - The event object.
+   * @returns {void}
+   * 
+   */
+  ev.preventDefault();
+  const id = document.getElementById('id').value;
+  const [year, month, day, index] = id.split(',');
+  showConfirmModal(formData.mensajeModalBorrar, _deleteEntry);
+
+}
+
 async function save(event) {
   /**
    * Validates the form inputs, creates or updates an entry in the `$allData` object,
@@ -117,9 +162,10 @@ async function save(event) {
   if (result === 'OK') {
     try {
       const form = document.querySelector('form');
-      const { gradodolor, molestias, otros_sintomas, medicacion, duracion, fechahora, mismoprocesoanterior } = form.elements;
+      const { id, gradodolor, molestias, otros_sintomas, medicacion, duracion, fechahora, mismoprocesoanterior } = form.elements;
       const molestiasFields = [...form.elements.molestiasGroup];
       const molestiasGroup = molestiasFields.filter((field) => field.checked).map((field) => field.value).join(',');
+      const entryId = id.value;
       const data = {
         gradodolor: gradodolor.value,
         molestias: molestiasGroup,
@@ -129,54 +175,45 @@ async function save(event) {
         fechahora: fechahora.value,
         mismoproceso: mismoprocesoanterior.checked,
       };
-      const year = data.fechahora.slice(0, 4);
-      const month = data.fechahora.slice(5, 7);
-      const day = data.fechahora.slice(8, 10);
-      // CUANDO FUNCIONE: $allData[year]?.[month]?.[day] ??= [];
-      if (!$allData[year]) {
-        $allData[year] = {};
-      }
-      if (!$allData[year][month]) {
-        $allData[year][month] = {};
-      }
-      if (!$allData[year][month][day]) {
-        $allData[year][month][day] = [];
-      }
       delete data.molestiasGroup;
-      if (data.id) {
-        const keys = data.id.split(',');
-        const entry = $allData[keys[0]][keys[1]][keys[2]][parseInt(keys[3], 10)];
-        const index = $allData[keys[0]][keys[1]][keys[2]].indexOf(entry);
-        delete data.id
-        $allData[keys[0]][keys[1]][keys[2]][index] = data;
-        /** REFACTOR
-        const {yearKey, monthKey, dayKey, posKey} = data.id.split(',');
-        const entry = $allData[yearKey][monthKey][dayKey][parseInt(posKey, 10)];
-        const index = $allData[yearKey][monthKey][dayKey].indexOf(entry);
-        delete data.id
-        $allData[yearKey][monthKey][dayKey][index] = data;
-        // */
+      if (entryId) {
+        const [year, month, day, index] = entryId.split(',');
+        $allData[year][month][day][parseInt(index, 10)] = data;
       } else {
+        const year = data.fechahora.slice(0, 4);
+        const month = data.fechahora.slice(5, 7);
+        const day = data.fechahora.slice(8, 10);
+        // CUANDO FUNCIONE: $allData[year]?.[month]?.[day] ??= [];
+        if (!$allData[year]) {
+          $allData[year] = {};
+        }
+        if (!$allData[year][month]) {
+          $allData[year][month] = {};
+        }
+        if (!$allData[year][month][day]) {
+          $allData[year][month][day] = [];
+        }
         $allData[year][month][day].push(data);
-        document.getElementById('id').value = `${year},${month},${day},${$allData[year][month][day].length - 1}`;
       }
       await $crud.insertData($allData, `/misjaquecas/${$user}`, () => {
         showModal(`
-          Datos guardados correctamente:
+          ${formData.mensajeDatosGuardados}:
 
-          Grado de dolor ${data.gradodolor}
-          ${data.molestias ? `Molestias ${data.molestias}` : 'Sin molestias definidas'}
-          ${data.otros_sintomas ? `Otros síntomas ${data.otros_sintomas}` : 'Sin otros síntomas'}
-          ${data.medicacion ? `Medicación ${data.medicacion}` : 'Sin medicación'}
-          ${data.duracion ? `Duración ${data.duracion}h` : 'Sin duración definida'}
-          Continuacion proceso anterior: ${data.mismoproceso ? 'Sí' : 'No' }
+          ${formdata.gradodolor} ${data.gradodolor}
+          ${data.molestias ? `${formData.molestias} ${data.molestias}` : formData.sinmolestias}
+          ${data.otros_sintomas ? `${formData.otrossintomas} ${data.otros_sintomas}` : formData.sinotros}
+          ${data.medicacion ? `${formData.medicacion} ${data.medicacion}` : formData.sinmedicacion}
+          ${data.duracion ? `${formData.duracion} ${data.duracion}h` : formData.sinduracion}
+
+          ${formData.contprocesoanterior}: ${data.mismoproceso ? formData.yes : formData.no}
         `);
       });
-      document.getElementById('form').reset();
-      console.log('saving data...');
+      resetEntry();
+      fillData();
+      console.log('Data saved...');
     } catch (error) {
       showModal(error);
-    }  
+    }
   } else {
     showModal(result);
   }
@@ -202,7 +239,7 @@ function cookData(entrada) {
       const horaInicio = new Date(item.fechahora).getHours();
       const duracion = item.duracion !== "" ? parseInt(item.duracion) : undefined;
       let grado = 1;
-      
+
       if (item.gradodolor.startsWith("D")) {
         grado = parseInt(item.gradodolor.slice(1)) + 1;
       }
@@ -221,7 +258,7 @@ function cookData(entrada) {
           Grado ${grado}
           Medication ${item.medicacion}
           Otros síntomas ${item.otros_sintomas}
-          Continuacion proceso anterior: ${item.mismoproceso ? 'Sí' : 'No' }`
+          Continuacion proceso anterior: ${item.mismoproceso ? 'Sí' : 'No'}`
       });
     });
   }
@@ -236,6 +273,77 @@ function checkNextItem(data, index) {
     return mismoproceso;
   }
   return false;
+}
+
+function cookGraphData(datos) {
+  const datosProcesados = {};
+  for (let mes = 1; mes <= 12; mes += 1) {
+    const gradodolorCount = {};
+    const mesStr = String(mes).padStart(2, '0');
+    if (datos[mesStr]) {
+      for (let dia in datos[mesStr]) {
+        for (let i = 0; i < datos[mesStr][dia].length; i++) {
+          const gradodolor = datos[mesStr][dia][i].gradodolor;
+          if (!gradodolorCount[gradodolor]) {
+            gradodolorCount[gradodolor] = 1;
+          } else {
+            gradodolorCount[gradodolor]++;
+          }
+        }
+      }
+    }
+    datosProcesados[mes] = gradodolorCount;
+  }
+  return datosProcesados;
+}
+
+function showGraphs(year = new Date().getFullYear()) {
+  const yearData = $allData[year];
+  const datosProcesados = cookGraphData(yearData);
+
+  const labels = Object.keys(datosProcesados); // Meses en el eje X
+  const datasets = [];
+
+  // Colores para los distintos tipos de gradodolor
+  const colores = {
+    D0: 'rgba(75, 192, 192, 0.7)',
+    D1: 'rgba(255, 206, 86, 0.7)',
+    D2: 'rgba(255, 99, 132, 0.7)',
+    D3: 'rgba(255, 0, 0, 0.7)',
+  };
+
+  for (const gradodolor in colores) {
+    const data = labels.map(function (mes) {
+      return datosProcesados[mes][gradodolor] || 0;
+    });
+
+    datasets.push({
+      label: gradodolor,
+      data: data,
+      backgroundColor: colores[gradodolor],
+    });
+  }
+
+  // Configurar el gráfico con Chart.js
+  const ctx = document.getElementById('charGraphs').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: datasets,
+    },
+    options: {
+      scales: {
+        x: {
+          stacked: true, // Para apilar las barras
+        },
+        y: {
+          beginAtZero: true,
+          stacked: true, // Para apilar las barras
+        },
+      },
+    },
+  });
 }
 
 function showStats(ev) {
@@ -280,7 +388,7 @@ function showStats(ev) {
               Grado ${nextDay.grado}
               Medication ${nextDay.medicacion}
               Otros síntomas ${nextDay.otros_sintomas}
-              Continuacion proceso anterior: ${nextDay.mismoproceso ? 'Sí' : 'No' }`
+              Continuacion proceso anterior: ${nextDay.mismoproceso ? 'Sí' : 'No'}`
           };
           dataMes.splice(index + 1, 0, newDay);
         }
@@ -303,7 +411,7 @@ function showStats(ev) {
         y: endHour,
       });
     }
- 
+
     const lineObject = {
       data: lines,
       label: day.label,
@@ -322,7 +430,7 @@ function showStats(ev) {
   // console.log(dataMes);
   // console.log(datasets);
 
-  const ctx = document.getElementById('my-chart').getContext('2d');
+  const ctx = document.getElementById('chartStatistics').getContext('2d');
   new Chart(ctx, {
     type: 'line',
     data: {
@@ -401,6 +509,32 @@ function fillYearsAndMonthsToStats() {
   document.getElementById('statsYear').addEventListener('change', fillMonthsToStats);
 }
 
+const gotoPos = (ev) => {
+  const increment = parseInt(ev.target.dataset.increment, 10);
+  const id = document.getElementById('id').value;
+  const [year, month, day, index] = id.split(',');
+  const entryPos = parseInt(index, 10) + increment;
+  if (entryPos >= 0 && entryPos < $allData[year][month][day].length) {
+    document.getElementById('id').value = `${year},${month},${day},${entryPos}`;
+    editEntry(ev);
+  }
+}
+
+function manageNavigation(action, entryPos, maxEntriesDay) {
+  const id = document.getElementById('id').value;
+  const [year, month, day, index] = id.split(',');
+  document.getElementById('subSummary').innerHTML = formData.editando;
+  document.getElementById('subSummary').classList.add('subSummaryEditando');
+  document.getElementById('navDate').innerHTML = `${entryPos + 1} de ${maxEntriesDay}<br>(${day}/${month}/${year})`;
+  document.getElementById('navigation').classList.remove('invisible');
+  const btnLeft = document.getElementById('btnLeft');
+  const btnRight = document.getElementById('btnRight');
+  btnLeft.removeEventListener('click', gotoPos);
+  btnRight.removeEventListener('click', gotoPos);
+  btnLeft.addEventListener('click', gotoPos);
+  btnRight.addEventListener('click', gotoPos);
+}
+
 function editEntry(ev) {
   /**
    * Populates the form fields with the data of the selected entry when a user clicks on a link in the list.
@@ -409,9 +543,11 @@ function editEntry(ev) {
    * @returns {void}
    */
   ev.preventDefault();
-  const id = ev.target.dataset.id;
-  const keys = id.split(',');
-  const entry = $allData[keys[0]][keys[1]][keys[2]][parseInt(keys[3], 10)];
+  const id = ev.target.dataset.id || document.getElementById('id').value;
+  const [year, month, day, index] = id.split(',');
+  const entryPos = parseInt(index, 10);
+  const entry = $allData[year][month][day][entryPos];
+  const maxEntriesDay = $allData[year][month][day].length;
   gradodolor = document.getElementById('gradodolor');
   molestias = document.getElementById('molestias');
   molestiasFields = [...document.querySelectorAll('[name=molestiasGroup]')];
@@ -419,8 +555,9 @@ function editEntry(ev) {
   medicacion = document.getElementById('medicacion');
   duracion = document.getElementById('duracion');
   fechahora = document.getElementById('fechahora');
-  
+
   document.getElementById('id').value = id;
+  manageNavigation('edit', entryPos, maxEntriesDay);
   gradodolor.value = entry.gradodolor;
   molestias.value = entry.molestias;
   otros_sintomas.value = entry.otros_sintomas;
@@ -436,7 +573,15 @@ function editEntry(ev) {
   });
   const form = document.getElementById('form');
   form.scrollIntoView();
-  document.getElementById('summaryIntroducirdatos').click();
+  document.getElementById('borrar').classList.remove('invisible');
+  document.getElementById('borrar').removeEventListener('click', deleteEntry);
+  document.getElementById('borrar').addEventListener('click', deleteEntry);
+  document.getElementById('cancel').classList.remove('invisible');
+  document.getElementById('cancel').removeEventListener('click', resetEntry);
+  document.getElementById('cancel').addEventListener('click', resetEntry);
+  if (!document.getElementById('summaryIntroducirdatos').parentElement.open) {
+    document.getElementById('summaryIntroducirdatos').click();
+  }
 }
 
 /**
@@ -472,7 +617,7 @@ function fillListado() {
       }, '');
       acc += /* html */`
         <details>
-          <summary>${$monthLetter[$lang][month]}/${year}</summary>
+          <summary>${$monthLetters[month]}/${year}</summary>
           <ul>${daysList}</ul>
         </details>
       `;
@@ -494,8 +639,17 @@ function fillListado() {
   });
 }
 
+async function fillData() {
+  $user = $crud.userData.uid;
+  $allData = await $crud.getData(`/misjaquecas/${$user}`) || {}
+  // console.log($allData);
+  fillListado();
+  fillYearsAndMonthsToStats();
+  const currentYear = new Date().getFullYear();
+  showGraphs(currentYear)
+}
 
-async function firebaseReady() {
+function firebaseReady() {
   document.addEventListener('firebase-signout', () => {
     console.log('signout');
     location.reload();
@@ -503,10 +657,7 @@ async function firebaseReady() {
   document.querySelector('main').classList.remove('invisible');
   const subtitle = document.querySelector('.title H2').dataset.str;
   document.querySelector('.title H2').innerHTML = subtitle;
-  $user = $crud.userData.uid;
-  $allData = await $crud.getData(`/misjaquecas/${$user}`) || {}
-  fillListado();
-  fillYearsAndMonthsToStats();
+  fillData();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

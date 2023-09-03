@@ -67,6 +67,13 @@ header {
 
 
 /* form */
+form {
+  border: 1px solid #fff;
+  padding: 1rem;
+  border-radius: 15px;
+  background: #222;
+}
+
 details {
   display: flex;
   flex-direction: column;
@@ -78,25 +85,25 @@ summary {
 }   
 
 
-
-label {
+form.insertData {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: auto;
+  grid-column-gap: 4px;
+  grid-row-gap: 0px;
+}
+form.insertData label {
   flex: 20%;
   color: var(--text-100);
   font-weight: bold;
   margin:0 0.2rem;
 }
-span {
+span.units {
   text-align: right;
-  padding: 1rem;
+  padding: 1rem;  
+  margin-right: 1.5rem;
 }
 
-form {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: auto;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
 
 .formElement1 { grid-area: 1 / 1 / 2 / 2; }
 .formElement2 { grid-area: 1 / 2 / 2 / 7; }
@@ -123,7 +130,42 @@ form {
 .formElement17 { grid-area: 7 / 2 / 8 / 7; }
 .formElement18 { grid-area: 7 / 5 / 8 / 7; }
 
-.formElement19 { grid-area: 8 / 2 / 8 / 8; }
+.formElement19 { grid-area: 8 / 1 / 8 / 2; }
+.formElement20 { grid-area: 8 / 2 / 8 / 5; }
+.formElement21 { grid-area: 8 / 5 / 8 / 8; }
+
+
+form.insertData button {
+  height:3rem;
+}
+.btnSave {
+  margin:0!important;
+}
+
+.btnDel {
+  background-color: rgba(255, 0, 0, 0.5)!important;
+}
+
+.btnCancel {
+  background-color: rgba(255, 255, 0, 0.5)!important;
+}
+.btnYes {
+  background-color: rgba(0, 255, 0, 0.5)!important;
+}
+.btnNo {
+  background-color: rgba(255, 0, 0, 0.5)!important;
+}
+
+.subSummary {
+  font-size: 0.9rem;
+  color: #fff;
+  background: rgba(0,255,0,0.5);
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+}
+.subSummaryEditando {
+  background: rgba(255,255,0,0.5);
+}
 
 #molestiasGroup {
   margin-top: 1rem;
@@ -133,6 +175,8 @@ form details {
   display: flex;
   flex-direction: column;
   padding: 0;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 form details > div {
@@ -146,10 +190,43 @@ form details summary {
   font-weight: 600;
 }
 
+#navigation {
+  display:flex;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+#navDate {
+  text-align: center;
+  padding: 0.2rem;
+  margin: 0;
+}
+.navBtn {
+  width: 3rem!important;
+  margin: 0 1rem;
+  height: 3rem!important;
+  padding: 0.5rem!important;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
 /* LISTADO */
 
 #listado {
   margin-bottom: 1rem;
+}
+
+#listado details {
+  margin:0 0.5rem;
+  margin-top: 1rem;
+  padding: 0.2rem 1rem;
+  width: 100%;
+}
+
+#listado details[open] > summary:first-of-type {
+  color: var(--primary-200) !important;
+  background-color: var(--accent-200) !important;
+  padding-left:1rem;
 }
 
 #listado UL {
@@ -174,5 +251,12 @@ form details summary {
   }
   .title {
     padding-top: 0;
+  }
+  details {
+    padding: 0.5rem 0.7rem;
+  }
+  span.units {
+    margin-right: 0;
+    white-space: nowrap;
   }
 }

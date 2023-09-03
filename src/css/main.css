@@ -21,14 +21,14 @@
   --bg-300:#ca9070;
     
   /* hack picoCSS */
-  --color: var(--primary-100) !important;
+  /* --color: var(--primary-100) !important;
   --background-color: var(--bg-100) ! important;
   --form-element-background-color: var(--bg-200) ! important;
   --form-element-color: var(--accent-200) ! important;
   --form-element-placeholder-color: var(--accent-200) ! important;
   --primary: var(--primary-100) ! important;
   --primary-inverse: var(--bg-100) ! important;
-  --primary-hover: var(--primary-200) ! important;
+  --primary-hover: var(--primary-200) ! important; */
 }
 
 .invisible {
@@ -38,6 +38,9 @@
 .required::after {
   content: "*";
   color: red;
+  margin-left: 5px;
+  position: relative;
+  top: -5px;
 }
 
 .off {
@@ -53,7 +56,9 @@
   align-items: center;
   font-size: 4rem;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+  margin:0;
+  padding:0;
   background-color: #555;
   color:#33AAAA;
 }
