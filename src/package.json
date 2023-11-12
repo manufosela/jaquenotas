@@ -12,7 +12,7 @@
     "lint:fix": "eslint ./js --fix",
     "prestorybook": "npm run analyze",
     "start:strapi": "npm run strapi && webpack-dev-server --env.dev --mode development --open",
-    "start": "web-dev-server --app-index index.html --node-resolve --watch --open --port 8081",
+    "start": "node start-server.mjs",
     "start:dist": "web-dev-server --app-index index.html --node-resolve --watch --open --port 8082 --root-dir ../dist",
     "stop": "kill $(ps aux | grep 'node.*es-dev-server' | awk '{print $2}')",
     "storybook:build": "build-storybook",
@@ -51,7 +51,7 @@
     "@open-wc/eslint-config": "^12.0.0",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.2.0",
-    "@wabuse/wabuse": "^1.0.0",
+    "@wabuse/wabuse": "^1.1.0",
     "@web/dev-server": "^0.3.0",
     "@webcomponents/webcomponentsjs": "^2.8.0",
     "chai": "^4.3.7",
@@ -66,15 +66,17 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-wc": "^1.5.0",
+    "get-port": "^7.0.0",
     "rollup": "^2.79.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-multi-input": "^1.4.1",
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "@firebase-utils/firebase-crud": "^1.5.1",
-    "@firebase-utils/firebase-loginbutton": "^1.7.4",
-    "chart": "^0.1.2",
-    "lit": "^2.8.0"
+    "@firebase-utils/firebase-crud": "^1.5.2",
+    "@firebase-utils/firebase-loginbutton": "^1.8.1",
+    "header-logomenu": "^1.5.8",
+    "lit": "^3.0.2",
+    "markdown-it": "^13.0.2"
   }
 }

@@ -1,0 +1,100 @@
+@import "main.css";
+@import "form.css";
+
+.title {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 80%;
+  padding-top: 2.5rem;
+}
+
+.title h1 {
+  background: var(--primary-100);
+  color: var(--accent-100);
+  text-align: center;
+  margin:1rem 0 !important;
+  padding:1rem!important;
+  border-radius: 5px;
+}
+
+.title h2 {
+  margin:0 !important;
+  padding:0 !important;
+  color: var(--text-100)!important;
+}
+
+/* fecha */
+.fechaLayer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items: center;
+  margin: 0.5rem 0 !important;
+}
+.left { grid-area: 1 / 1 / 2 / 2; }
+.center { grid-area: 1 / 2 / 2 / 5; }
+.right { grid-area: 1 / 5 / 2 / 6; }
+
+.fechahora {
+  max-width: 20rem;
+}
+.editarfechaBtn {
+  width: 3.5rem;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  padding: 0;
+}
+
+.fecha {
+  width: 10rem!important;
+  height: 1.5rem!important;
+  padding: 0!important;
+  margin: 0!important;
+  margin-left: 1rem!important;
+  color: var(--text-100)!important;
+}
+
+ul li {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.entryList LI {
+  list-style: none;
+  text-align: left;
+}
+
+span.field {
+  color: var(--text-100);
+  font-weight: bold;
+}
+span.data {
+  color: var(--primary-200);
+  font-weight: normal;
+}
+
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+  }
+  header h1 {
+    flex: 100%;
+    font-size: 1.5rem;
+  }
+  .title {
+    padding-top: 0;
+  }
+  details {
+    padding: 0.5rem 0.7rem;
+  }
+  span.units {
+    margin-right: 0;
+    white-space: nowrap;
+  }
+}

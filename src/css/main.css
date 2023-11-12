@@ -8,7 +8,11 @@
     box-sizing: border-box;
 }
 
+/** VARIABLES FONTS AND SIZES **/
 :root {
+  --base-font-size: 1.125rem; /* 18px */
+  --base-line-height: 1.8125rem; /* 29px */
+
   --primary-100:#FF5733;
   --primary-200:#ff8a5f;
   --primary-300:#fff3bf;
@@ -19,6 +23,22 @@
   --bg-100:#FFC09F;
   --bg-200:#f4b695;
   --bg-300:#ca9070;
+  overflow-x: hidden;
+
+  --firebase-loginbutton_mobile-icon-color__logged:var(--bg-100);
+  --firebase-loginbutton_mobile-icon-bg-color__logged: green;
+  --firebase-loginbutton_mobile-icon-color__not-logged: var(--primary-100);
+  --firebase-loginbutton_mobile-icon-bg-color__not-logged: red;
+  --firebase-loginbutton_btn-background-color: transparent;
+  --firebase-loginbutton_mobile-button-height: 2rem;
+  --firebase-loginbutton_btn-photo-size: 0;
+  --firebase-loginbutton_btn-photo-size-container: 0;
+  --firebase-loginbutton_margin: 0;
+  --firebase-loginbutton_padding: 0;
+  --firebase-loginbutton_padding-container: 0;
+  --firebase-loginbutton_border-logged: 0;
+  --firebase-loginbutton_border-boxshadow-logged: none;
+
     
   /* hack picoCSS */
   /* --color: var(--primary-100) !important;
@@ -29,6 +49,55 @@
   --primary: var(--primary-100) ! important;
   --primary-inverse: var(--bg-100) ! important;
   --primary-hover: var(--primary-200) ! important; */
+}
+
+header {
+  display: flex;
+  justify-content: space-around;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+#main {
+  padding: 0;
+  margin: 0;
+  height: calc(100vh - 4rem);
+  overflow: auto;
+}
+
+main header {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.5rem;
+}
+
+main h2 {
+  margin: 0.7rem;
+  display:inline-block;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 2rem;
+  margin: 1.5rem auto;
+  text-align: center;
+}
+
+footer section {
+  height: 1.8rem;
+  margin: 0;
+  padding: 0;
+}
+footer .avisolegal a {
+  font-size: 0.8rem;
+}
+
+header-logomenu {
+  width: 100vw;
+  height: 4rem;
 }
 
 .invisible {
@@ -82,21 +151,13 @@
 }
 
 .loginbutton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary-100);
+  margin-top: 1rem;
+  margin-right: 1rem;
   color: var(--bg-100);
-  border: 1px solid var(--primary-100);
-  border-radius: 0.5rem;
   padding: 0;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
-  --firebase-loginbutton_mobile-icon-color__logged:var(--bg-100);
-  --firebase-loginbutton_mobile-icon-bg-color__logged: var(--primary-100);
-  --firebase-loginbutton_mobile-icon-color__not-logged: var(--primary-100);
-  --firebase-loginbutton_mobile-icon-bg-color__not-logged: var(--bg-100);
-  --firebase-loginbutton_mobile-button-height: 2.5rem;
+  height:4rem;
 }
 
 @keyframes fadeInOpacity {
@@ -167,18 +228,27 @@ body {
   transition: all 0.2s ease-in-out;
 }
 
-/** VARIABLES FONTS AND SIZES **/
-:root {
-  --base-font-size: 1.125rem; /* 18px */
-  --base-line-height: 1.8125rem; /* 29px */
-}
+/** Media Queries **/
 
 @media (max-width: 768px) {
   :root {
     --base-font-size: 1rem; /* 16px */
     --base-line-height: 1.5rem; /* 24px */
+    --firebase-loginbutton_padding-container: 0;
   }
   .loading {
     font-size: 2rem;
+  }
+  .loginbutton {
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--primary-100);
+    margin:0;
+    padding:0;
+  }
+  .underline {
+    left:6rem;
   }
 }

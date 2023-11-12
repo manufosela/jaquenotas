@@ -1,0 +1,49 @@
+@import "main.css";
+
+main {
+  display: grid;
+  grid-template-columns: 25% auto;
+  grid-template-rows: auto 6rem auto;
+  gap: 10px;
+}
+
+h2 {
+  grid-column: 1 / -1; /* Ocupa desde la primera hasta la última columna */
+  grid-row: 1;
+}
+
+aside {
+  padding: 0 1rem;
+}
+
+#years {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#months {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#stats {
+  grid-column: 2;
+  grid-row: 2 / -1; /* Ocupa desde la segunda fila hasta la última */
+}
+
+@media (max-width: 768px) {
+  main {
+    grid-template-columns: 1fr; /* Una sola columna que ocupa todo el ancho */
+    grid-template-rows: auto; /* Altura automática para cada fila */
+  }
+
+  h2, #years, #months, #stats {
+    grid-column: 1; /* Todos los elementos en la primera columna */
+    grid-row: auto; /* Altura automática para cada fila */
+  }
+  
+  #stats {
+    display: block; /* Asegúrate de que #stats no tenga la clase .invisible para que se muestre */
+  }
+}
+

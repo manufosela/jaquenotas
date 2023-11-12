@@ -29,6 +29,10 @@ export default {
         dest: '../dist'
       },
       {
+        src: '**/*.png',
+        dest: '../dist'
+      },
+      {
         src: 'assets/**/*',
         dest: '../dist/assets'
       },
@@ -39,7 +43,7 @@ export default {
       {
         src: 'json/**/*',
         dest: '../dist/json'
-      },{
+      }, {
         src: 'js/lib/chart.js',
         dest: '../dist/js/lib'
       }]

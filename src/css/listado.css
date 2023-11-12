@@ -1,0 +1,35 @@
+@import "main.css";
+@import "form.css";
+
+ul li {
+  list-style: none;
+}
+
+.entryList LI {
+  list-style: none;
+  text-align: left;
+}
+
+span.field {
+  color: var(--text-100);
+  font-weight: bold;
+}
+span.data {
+  color: var(--primary-200);
+  font-weight: normal;
+}
+
+.nextEntry, .prevEntry {
+  color: var(--primary-200);
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0;
+}
+
+.btnEdit {
+  margin: 0;
+  margin-top: 1rem;
+  background-color: var(--primary-200)!important;
+  font-weight: bold;
+  text-decoration: none;
+}

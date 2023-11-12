@@ -1,0 +1,130 @@
+/* form */
+form {
+  border: 1px solid #fff;
+  padding: 1rem;
+  border-radius: 15px;
+  background: #222;
+}
+
+details {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 2rem;
+}
+summary {
+  color: var(--primary-100) !important;
+  padding: 0.3rem 0;
+}   
+
+
+form.insertData {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: auto;
+  grid-column-gap: 4px;
+  grid-row-gap: 0px;
+  margin: 0 1rem;
+}
+form.insertData label {
+  flex: 20%;
+  color: var(--text-100);
+  font-weight: bold;
+  margin:0 0.2rem;
+}
+span.units {
+  text-align: right;
+  padding: 1rem;  
+  margin-right: 1.5rem;
+}
+
+
+.formElement1 { grid-area: 1 / 1 / 2 / 2; }
+.formElement2 { grid-area: 1 / 2 / 2 / 7; }
+.formElement3 { grid-area: 1 / 6 / 2 / 7; }
+
+.formElement4 { grid-area: 2 / 1 / 3 / 2; }
+.formElement5 { grid-area: 2 / 2 / 3 / 7; }
+
+.formElement6 { grid-area: 3 / 1 / 4 / 2; margin-top:0.35rem; margin-left:70%; }
+.formElement7 { grid-area: 3 / 2 / 4 / 7; }
+
+.formElement8 { grid-area: 4 / 1 / 5 / 7; } 
+/*.formElement9 { grid-area: 3 / 5 / 4 / 7; }*/
+
+.formElement10 { grid-area: 5 / 1 / 6 / 2; }
+.formElement11 { grid-area: 5 / 2 / 6 / 7; }
+.formElement12 { grid-area: 5 / 5 / 6 / 7; }
+
+.formElement13 { grid-area: 6 / 1 / 7 / 2; }
+.formElement14 { grid-area: 6 / 2 / 7 / 7; }
+.formElement15 { grid-area: 6 / 5 / 7 / 7; }
+
+.formElement16 { grid-area: 7 / 1 / 8 / 2; }
+.formElement17 { grid-area: 7 / 2 / 8 / 7; }
+.formElement18 { grid-area: 7 / 5 / 8 / 7; }
+
+.formElement19 { grid-area: 8 / 1 / 8 / 2; }
+.formElement20 { grid-area: 8 / 2 / 8 / 5; }
+.formElement21 { grid-area: 8 / 5 / 8 / 8; }
+
+
+form.insertData button {
+  height:3rem;
+}
+.btnSave {
+  margin:0!important;
+}
+
+.btnDel {
+  background-color: rgba(255, 0, 0, 0.5)!important;
+}
+
+.btnCancel {
+  background-color: rgba(255, 255, 0, 0.5)!important;
+}
+.btnYes {
+  background-color: rgba(0, 255, 0, 0.5)!important;
+}
+.btnNo {
+  background-color: rgba(255, 0, 0, 0.5)!important;
+}
+
+.subSummary {
+  font-size: 0.9rem;
+  color: #fff;
+  background: rgba(0,255,0,0.5);
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+}
+.subSummaryEditando {
+  background: rgba(255,255,0,0.5);
+}
+
+#molestiasGroup {
+  margin-top: 1rem;
+}
+
+form details {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+form details > div {
+  display: flex;
+  flex-direction: row;
+  color: var(--text-100) !important;
+}
+
+form details summary {
+  color: var(--text-100)!important;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  details {
+    padding: 0.5rem;
+  }
+}
