@@ -20,13 +20,14 @@ if (urlLang === 'es' || urlLang === 'en') {
 }
 
 function firebaseReady(ev) {
-  if (ev.detail.id === 'myCrud' && !crudReady) {
+  if (ev.detail.id === 'myCrud' && !crudReady && fblogin) {
     crudReady = true;
     $appData.crud = document.querySelector('firebase-crud');
     $appData.user = $appData.crud.userData.uid;
   }
   if (ev.detail.id === 'myLoginButton' && !fblogin) {
     fblogin = true;
+    console.log('login ready');
   }
 
   if (fblogin && crudReady && firstTime) {
@@ -40,28 +41,8 @@ function firebaseReady(ev) {
   }
 }
 
-function moduleGraficosLoadedFunc() {
-}
-
-function moduleListadoLoadedFunc() {
-}
-
-function moduleEstadisticasLoadedFunc() {
-}
-
-function moduleInsertarLoadedFunc(e) {
-  document.getElementById('fechahora').value = new Date().toISOString().slice(0, 16);
-  $appData = e.detail.appData;
-  document.getElementById('guardar').addEventListener('click', save);
-  /* close all details except the one that is open */
-  document.querySelectorAll('details').forEach((detail) => {
-    detail.addEventListener('toggle', closeDetails);
-  });
-}
-
 function DOMContentLoaded() {
   document.addEventListener('wc-ready', firebaseReady);
-
   $appData.modalOverlay = createModal();
 }
 
