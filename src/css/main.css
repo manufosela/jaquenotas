@@ -63,6 +63,7 @@ header {
   height: var(--header-height);
   margin-bottom: 0.5rem;
   background-color: var(--header-logomenu-background-color);
+  z-index: 10;
 }
 
 #main {
@@ -76,6 +77,7 @@ main {
   position: relative;
   top:var(--header-height);
 }
+
 main header {
   display: flex;
   justify-content: space-around;
