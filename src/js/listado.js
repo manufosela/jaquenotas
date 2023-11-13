@@ -1,4 +1,4 @@
-import './lib/common';
+import { $lang } from './lib/common';
 import { showModal, showConfirmModal, resetButtons } from './lib/modal.js';
 import { save, resetForm } from './lib/form.js';
 import jsonData from '../json/listado.json.js';
@@ -9,7 +9,6 @@ import '@firebase-utils/firebase-loginbutton';
 import '@firebase-utils/firebase-crud';
 import 'header-logomenu';
 
-const $lang = navigator.language || navigator.userLanguage || localStorage.getItem('lang') || 'es';
 const pageData = jsonData[$lang];
 
 let $allData;
