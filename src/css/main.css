@@ -55,9 +55,12 @@
 }
 
 header {
+  position: absolute;
+  top: 0;
   display: flex;
   justify-content: space-around;
-  height: 4rem;
+  width: 100vw;
+  height: var(--header-height);
   margin-bottom: 0.5rem;
   background-color: var(--header-logomenu-background-color);
 }
@@ -69,6 +72,10 @@ header {
   overflow: auto;
 }
 
+main {
+  position: relative;
+  top:var(--header-height);
+}
 main header {
   display: flex;
   justify-content: space-around;
@@ -85,15 +92,20 @@ footer {
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: 2rem;
-  margin: 1.5rem auto;
+  height: 4rem;
+  margin: 0 auto;
   text-align: center;
+  background-color: var(--accent-200);
+  color: var(--text-100);
 }
 
 footer section {
   height: 1.8rem;
   margin: 0;
   padding: 0;
+}
+footer a {
+  color: var(--primary-300)
 }
 footer .avisolegal a {
   font-size: 0.8rem;
