@@ -79,17 +79,6 @@ span.data {
 
 
 @media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    height: auto;
-  }
-  header h1 {
-    flex: 100%;
-    font-size: 1.5rem;
-  }
-  .title {
-    padding-top: 0;
-  }
   details {
     padding: 0.5rem 0.7rem;
   }
