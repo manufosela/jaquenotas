@@ -29,6 +29,10 @@ export default {
         dest: '../dist'
       },
       {
+        src: 'manifest.json',
+        dest: '../dist'
+      },
+      {
         src: '**/*.png',
         dest: '../dist'
       },
