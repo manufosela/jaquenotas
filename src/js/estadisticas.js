@@ -10,7 +10,6 @@ import 'header-logomenu';
 
 const $borderWidth = (window.innerWidth < 768 ? 5 : 10)
 
-let $appData;
 let $allData;
 let $chart;
 
@@ -234,8 +233,8 @@ function fillYearsAndMonthsToStats() {
 }
 
 async function estadisticasFn(ev) {
-  $appData = ev.detail.appData;
-  $allData = await $appData.crud.getData(`/misjaquecas/${$appData.user}`) || {}
+  window.$appData = ev.detail.appData;
+  $allData = await window.$appData.crud.getData(`/misjaquecas/${window.$appData.user}`) || {}
   fillYearsAndMonthsToStats();
 }
 

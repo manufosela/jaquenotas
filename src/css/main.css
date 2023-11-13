@@ -12,6 +12,7 @@
 :root {
   --base-font-size: 1.125rem; /* 18px */
   --base-line-height: 1.8125rem; /* 29px */
+  --header-height: 4rem;
 
   --primary-100:#FF5733;
   --primary-200:#ff8a5f;
@@ -24,6 +25,8 @@
   --bg-200:#f4b695;
   --bg-300:#ca9070;
   overflow-x: hidden;
+
+  --header-logomenu-background-color: #FFF;
 
   --firebase-loginbutton_mobile-icon-color__logged:var(--bg-100);
   --firebase-loginbutton_mobile-icon-bg-color__logged: green;
@@ -56,12 +59,13 @@ header {
   justify-content: space-around;
   height: 4rem;
   margin-bottom: 0.5rem;
+  background-color: var(--header-logomenu-background-color);
 }
 
 #main {
   padding: 0;
   margin: 0;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - var(--header-height));
   overflow: auto;
 }
 
@@ -96,8 +100,8 @@ footer .avisolegal a {
 }
 
 header-logomenu {
-  width: 100vw;
-  height: 4rem;
+  width: 90vw;
+  height: var(--header-height);
 }
 
 .invisible {
@@ -151,13 +155,13 @@ header-logomenu {
 }
 
 .loginbutton {
-  margin-top: 1rem;
-  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
   color: var(--bg-100);
   padding: 0;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
-  height:4rem;
+  height: var(--header-height);
 }
 
 @keyframes fadeInOpacity {
@@ -240,12 +244,10 @@ body {
     font-size: 2rem;
   }
   .loginbutton {
-    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--primary-100);
-    margin:0;
+    margin:0.2rem;
     padding:0;
   }
   .underline {

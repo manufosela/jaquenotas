@@ -10,7 +10,6 @@ import 'header-logomenu';
 
 const pageData = jsonData[$lang];
 
-let $appData;
 let $allData;
 
 function cookGraphData(datos) {
@@ -85,8 +84,8 @@ function showGraphs(year = new Date().getFullYear()) {
 }
 
 async function graficoFn(ev) {
-  $appData = ev.detail.appData;
-  $allData = await $appData.crud.getData(`/misjaquecas/${$appData.user}`) || {}
+  window.$appData = ev.detail.appData;
+  $allData = await window.$appData.crud.getData(`/misjaquecas/${window.$appData.user}`) || {}
   const currentYear = new Date().getFullYear();
   showGraphs(currentYear);
 }

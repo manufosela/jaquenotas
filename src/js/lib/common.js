@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
   document.getElementById('main').classList.add('fadein');
 });
 
-let $appData = {}; // modalOverlay, crud, user
+window.window.$appData = {}; // modalOverlay, crud, user
 
 let fblogin = false;
 let crudReady = false;
@@ -22,8 +22,9 @@ if (urlLang === 'es' || urlLang === 'en') {
 function firebaseReady(ev) {
   if (ev.detail.id === 'myCrud' && !crudReady && fblogin) {
     crudReady = true;
-    $appData.crud = document.querySelector('firebase-crud');
-    $appData.user = $appData.crud.userData.uid;
+    window.$appData.crud = ev.detail.component;
+    window.$appData.crud.dataUser = document.querySelector('firebase-loginbutton').dataUser;
+    window.$appData.user = window.$appData.crud.dataUser.uid;
   }
   if (ev.detail.id === 'myLoginButton' && !fblogin) {
     fblogin = true;
@@ -36,14 +37,14 @@ function firebaseReady(ev) {
       location.reload();
     });
     document.querySelector('main').classList.remove('invisible');
-    document.dispatchEvent(new CustomEvent('dom-content-loaded', { detail: { appData: $appData } }));
+    document.dispatchEvent(new CustomEvent('dom-content-loaded', { detail: { appData: window.$appData } }));
     firstTime = false;
   }
 }
 
 function DOMContentLoaded() {
   document.addEventListener('wc-ready', firebaseReady);
-  $appData.modalOverlay = createModal();
+  window.$appData.modalOverlay = createModal();
 }
 
 document.addEventListener('DOMContentLoaded', DOMContentLoaded, { once: true });

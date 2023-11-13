@@ -1,6 +1,5 @@
 <header>
   <header-logomenu logo="/assets/images/jaquecastigo.png" logo-url="/index.html">
-    ${title}
     <nav>
       <ul>
         <li id="link1">
@@ -18,21 +17,20 @@
         <li id="link5">
           <a href="/${lang}/acercade.html" tabindex="0">${grupoMenu.acercade}</a>
         </li>
-        <li>
-          <firebase-loginbutton
-            id="myLoginButton"
-            api-key="AIzaSyCAfMOqGesYR_0EH-nNncWoJx8c3O--Kfs"
-            domain="jaquenotas"
-            zone="europe-west1"
-            messaging-sender-id="59103377385"
-            app-id="1:59103377385:web:2b79eac410e446de297d78"
-            class="loginbutton"
-            show-icon
-          ></firebase-loginbutton>
+        <li id="login">
         </li>
       </ul>
     </nav>
   </header-logomenu>
-
-  <firebase-crud id="myCrud" reference-id="myLoginButton"></firebase-crud>
+  <firebase-loginbutton
+    id="myLoginButton"
+    api-key="AIzaSyCAfMOqGesYR_0EH-nNncWoJx8c3O--Kfs"
+    domain="jaquenotas"
+    zone="europe-west1"
+    messaging-sender-id="59103377385"
+    app-id="1:59103377385:web:2b79eac410e446de297d78"
+    class="loginbutton"
+    show-icon
+  ></firebase-loginbutton>
+  <firebase-crud id="myCrud" reference-id="myLoginButton"></firebase-crud>  
 </header>

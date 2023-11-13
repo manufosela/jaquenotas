@@ -6,5 +6,3 @@ import '@firebase-utils/firebase-crud';
 import 'header-logomenu';
 
 import jsonData from '../json/index.json.js';
-
-let $appData = {};
