@@ -121,12 +121,12 @@ function showStats(ev) {
 
     if (endHour <= 24) {
       lines.push({
-        x: dia,
-        y: startHour,
+        x: startHour,
+        y: dia,
       });
       lines.push({
-        x: dia,
-        y: endHour,
+        x: endHour,
+        y: dia,
       });
     }
 
@@ -160,7 +160,7 @@ function showStats(ev) {
     },
     options: {
       scales: {
-        x: {
+        y: {
           type: 'linear',
           position: 'bottom',
           title: {
@@ -173,7 +173,7 @@ function showStats(ev) {
           suggestedMin: 1,
           suggestedMax: getDaysInMonth(year, month)
         },
-        y: {
+        x: {
           type: 'linear',
           position: 'left',
           title: {
