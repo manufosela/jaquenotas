@@ -1,6 +1,12 @@
 {
   "rules": {
-    ".read": "now < 1695074400000",  // 2023-9-19
-    ".write": "now < 1695074400000",  // 2023-9-19
+    ".read": "auth.provider === 'google'",
+    ".write": "auth.provider === 'google'",
+  	"misjaquecas": {
+  		"$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
   }
 }
